@@ -11,19 +11,23 @@ process.env.SECRET_KEY = 'secret'
 
 students.post('/register', (req, res) => {
     const studentData = {
-        email: req.body.email,
-        password: req.body.password,
-        username: req.body.username
+        registrationNumber: req.body.oRegisterData.registrationNumber,
+        email: req.body.oRegisterData.email,
+        password: req.body.oRegisterData.password,
+        username: req.body.oRegisterData.username
     }
-
-    studentModel.findOne({email: req.body.email}).then(student => {
+    console.log(req.body);
+    studentModel.findOne({email: req.body.oRegisterData.email}).then(student => {
         if (!student) {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
+            bcrypt.hash(req.body.oRegisterData.password, 10, (err, hash) => {
                 studentData.password = hash
                 studentModel.create(studentData).then(student => {
-                    res.status(201).json({
-                        status: student.email + 'registered!'
-                    })
+                    const payload = {
+                        _id: student._id,
+                        email: student.email
+                    }
+                    let token = jwt.sign(payload, process.env.SECRET_KEY, {})
+                    res.send(token)
                 }).catch(err => {
                     res.send('error' + err)
                 })
@@ -37,9 +41,9 @@ students.post('/register', (req, res) => {
 })
 
 students.post('/login', (req, res) => {
-    studentModel.findOne({email: req.body.email}).then(student => {
+    studentModel.findOne({email: req.body.userData.email}).then(student => {
         if (student) {
-            if (bcrypt.compareSync(req.body.password, student.password)) {
+            if (bcrypt.compareSync(req.body.userData.password, student.password)) {
                 const payload = {
                     _id: student._id,
                     email: student.email
@@ -47,7 +51,7 @@ students.post('/login', (req, res) => {
                 let token = jwt.sign(payload, process.env.SECRET_KEY, {})
                 res.send(token)
             } else {
-                res.status(401).json({error: "student does not exist"})
+                res.status(401).json({error: "Password incorect"})
             }
         } else {
             res.status(401).json({error: "student does not exist"})
@@ -55,7 +59,7 @@ students.post('/login', (req, res) => {
     }).catch(err => {
         res.send('error: ' + err)
     })
-
 })
+
 
 module.exports = students
