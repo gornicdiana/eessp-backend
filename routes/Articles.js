@@ -1,6 +1,6 @@
 const express = require("express");
 const articles = express.Router();
-const cors = require("cors");
+const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -9,28 +9,43 @@ articles.use(cors());
 
 process.env.SECRET_KEY = "secret";
 articles.post("/add", (req, res) => {
-  var decoded = jwt.verify(
-    req.headers["authorization"],
-    process.env.SECRET_KEY
-  );
+    var decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    console.log(decoded);
 
-  const articleData = {
-    Author: decoded.email,
-    Title: req.body.Title,
-    Category: req.body.Category,
-    Body: req.body.Body,
-  };
-  console.log(decoded);
-  articleData.Author = decoded.email;
-  articleModel
-    .create(articleData)
-    .then((article) => {
-      console.log(article);
-      return res.json(article);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send("error" + err);
+    const articleData = {
+        email: decoded.email,
+        author: "" + decoded.firstname + " " + decoded.lastname,
+        title: req.body.title,
+        category: req.body.category,
+        body: req.body.body
+    };
+    console.log(articleData);
+    articleModel.create(articleData).then((article) => {
+        return res.json(article);
+    }).catch((err) => {
+        console.log(err);
+        return res.send("error" + err);
+    });
+});
+
+articles.get("/myArticles", (req, res) => {
+    var decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    console.log(decoded);
+
+    articleModel.find({email: decoded.email}).then((article) => {
+        console.log(article);
+        res.send(article);
+    }).catch((err) => {
+        res.send("error: " + err);
+    });
+});
+
+articles.get("/allArticles", (req, res) => {
+    articleModel.find().then((article) => {
+        console.log(article);
+        res.send(article);
+    }).catch((err) => {
+        res.send("error: " + err);
     });
 });
 
