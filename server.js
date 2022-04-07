@@ -17,11 +17,12 @@ mongoose.connect(mongoURI, {useNewUrlParser: true}).then(() => console.log("Mong
 var Students = require('./routes/Students');
 var Articles = require('./routes/Articles');
 var Therapists = require('./routes/Therapists');
+var Appointments = require('./routes/Appointments');
 
 app.use('/students', Students);
 app.use('/articles', Articles);
 app.use('/therapists', Therapists);
-
+app.use('/appointments', Appointments);
 
 app.listen(port, () => {
     console.log("Server is running on port: " + port);

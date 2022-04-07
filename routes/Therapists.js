@@ -9,7 +9,6 @@ therapists.use(cors());
 
 process.env.SECRET_KEY = "secret";
 
-// register therapist
 therapists.post("/register", (req, res) => {
     const therapistData = {
         email: req.body.email,
@@ -77,7 +76,7 @@ therapists.get("/allTherapists", (req, res) => {
 });
 
 therapists.get("/info", (req, res) => {
-    var decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
     console.log("DECODED", decoded);
     therapistModel.findOne({email: decoded.email}).then((therapist) => {
         const data = {

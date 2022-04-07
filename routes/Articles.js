@@ -9,7 +9,7 @@ articles.use(cors());
 
 process.env.SECRET_KEY = "secret";
 articles.post("/add", (req, res) => {
-    var decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
     console.log(decoded);
 
     const articleData = {
@@ -29,7 +29,7 @@ articles.post("/add", (req, res) => {
 });
 
 articles.get("/myArticles", (req, res) => {
-    var decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
     console.log(decoded);
 
     articleModel.find({email: decoded.email}).then((article) => {
