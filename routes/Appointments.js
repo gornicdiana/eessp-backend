@@ -21,7 +21,6 @@ appointments.post("/add", (req, res) => {
         startDate: req.body.startDate,
         endDate: req.body.endDate
     };
-    console.log(appointmentData);
 
     appointmentModel.create(appointmentData).then((appointment) => {
         return res.json(appointment);
@@ -33,10 +32,8 @@ appointments.post("/add", (req, res) => {
 
 appointments.get("/therapistCalendar", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(decoded);
 
     appointmentModel.find({therapist: decoded.email}).then((appointment) => {
-        console.log(appointment);
         res.send(appointment);
     }).catch((err) => {
         res.send("error: " + err);
@@ -45,10 +42,8 @@ appointments.get("/therapistCalendar", (req, res) => {
 
 appointments.get("/studentCalendar", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(decoded);
 
     appointmentModel.find({student: decoded.email}).then((appointment) => {
-        console.log(appointment);
 
         res.send(appointment);
     }).catch((err) => {

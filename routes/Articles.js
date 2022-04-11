@@ -10,7 +10,6 @@ articles.use(cors());
 process.env.SECRET_KEY = "secret";
 articles.post("/add", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(decoded);
 
     const articleData = {
         email: decoded.email,
@@ -19,7 +18,6 @@ articles.post("/add", (req, res) => {
         category: req.body.category,
         body: req.body.body
     };
-    console.log(articleData);
     articleModel.create(articleData).then((article) => {
         return res.json(article);
     }).catch((err) => {
@@ -30,10 +28,8 @@ articles.post("/add", (req, res) => {
 
 articles.get("/myArticles", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(decoded);
 
     articleModel.find({email: decoded.email}).then((article) => {
-        console.log(article);
         res.send(article);
     }).catch((err) => {
         res.send("error: " + err);
@@ -42,7 +38,6 @@ articles.get("/myArticles", (req, res) => {
 
 articles.get("/allArticles", (req, res) => {
     articleModel.find().then((article) => {
-        console.log(article);
         res.send(article);
     }).catch((err) => {
         res.send("error: " + err);

@@ -18,7 +18,6 @@ therapists.post("/register", (req, res) => {
         password: req.body.password,
         username: req.body.username
     };
-    console.log(req.body);
     therapistModel.findOne({email: req.body.email}).then((therapist) => {
         if (!therapist) {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -31,7 +30,6 @@ therapists.post("/register", (req, res) => {
                         lastname: therapist.lastname
                     };
                     let token = jwt.sign(payload, process.env.SECRET_KEY, {});
-                    console.log(token);
                     res.send(token);
                 }).catch((err) => {
                     res.send("error" + err);
@@ -46,7 +44,6 @@ therapists.post("/register", (req, res) => {
 });
 
 therapists.post("/login", (req, res) => {
-    console.log(req.body);
     therapistModel.findOne({email: req.body.email}).then((therapist) => {
         if (therapist) {
             if (bcrypt.compareSync(req.body.password, therapist.password)) {
@@ -70,6 +67,7 @@ therapists.post("/login", (req, res) => {
 therapists.get("/allTherapists", (req, res) => {
     therapistModel.find().then((therapist) => {
         res.send(therapist);
+        console.log(therapist);
     }).catch((err) => {
         res.send("error: " + err);
     });
@@ -77,7 +75,6 @@ therapists.get("/allTherapists", (req, res) => {
 
 therapists.get("/info", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log("DECODED", decoded);
     therapistModel.findOne({email: decoded.email}).then((therapist) => {
         const data = {
             email: therapist.email,

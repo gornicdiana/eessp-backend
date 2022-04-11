@@ -10,14 +10,12 @@ students.use(cors());
 process.env.SECRET_KEY = "secret";
 
 students.post("/register", (req, res) => {
-    console.log(req.body);
     const studentData = {
         registrationNumber: req.body.oRegisterData.registrationNumber,
         email: req.body.oRegisterData.email,
         password: req.body.oRegisterData.password,
         username: req.body.oRegisterData.username
     };
-    console.log(req.body);
     studentModel.findOne({email: req.body.oRegisterData.email}).then((student) => {
         if (!student) {
             bcrypt.hash(req.body.oRegisterData.password, 10, (err, hash) => {
@@ -42,7 +40,6 @@ students.post("/register", (req, res) => {
 });
 
 students.post("/login", (req, res) => {
-    console.log(req.body);
     studentModel.findOne({email: req.body.email}).then((student) => {
         if (student) {
             if (bcrypt.compareSync(req.body.password, student.password)) {
@@ -65,7 +62,6 @@ students.post("/login", (req, res) => {
 
 students.get("/info", (req, res) => {
     var decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log("DECODED", decoded);
     studentModel.findOne({email: decoded.email}).then((student) => {
         const data = {
             email: student.email,
