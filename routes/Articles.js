@@ -10,7 +10,6 @@ articles.use(cors());
 process.env.SECRET_KEY = "secret";
 articles.post("/add", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-
     const articleData = {
         email: decoded.email,
         author: "" + decoded.firstname + " " + decoded.lastname,
@@ -39,6 +38,18 @@ articles.get("/myArticles", (req, res) => {
 articles.get("/allArticles", (req, res) => {
     articleModel.find().then((article) => {
         res.send(article);
+    }).catch((err) => {
+        res.send("error: " + err);
+    });
+});
+
+articles.delete("/delete", (req, res) => {
+    console.log(req.body);
+    let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+
+    articleModel.deleteOne({email: decoded.email, title: req.body.title}).then((articles) => {
+        console.log(articles);
+        res.send("Article deleted!");
     }).catch((err) => {
         res.send("error: " + err);
     });

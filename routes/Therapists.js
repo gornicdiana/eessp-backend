@@ -17,6 +17,7 @@ therapists.post("/register", (req, res) => {
         lastname: req.body.lastname,
         password: req.body.password,
         username: req.body.username
+
     };
     therapistModel.findOne({email: req.body.email}).then((therapist) => {
         if (!therapist) {
@@ -81,7 +82,8 @@ therapists.get("/info", (req, res) => {
             username: therapist.username,
             phone: therapist.phone,
             firstname: therapist.firstname,
-            lastname: therapist.lastname
+            lastname: therapist.lastname,
+            information: therapist.information
         };
         res.send(data);
     }).catch((err) => {
@@ -89,4 +91,20 @@ therapists.get("/info", (req, res) => {
     });
 });
 
+therapists.put("/update", (req, res) => {
+    let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    console.log(req.body);
+    console.log(decoded);
+    const info = {
+        information: req.body.infoData
+    }
+    therapistModel.updateOne({
+        email: decoded.email
+    }, info).then((therapist) => {
+        console.log(therapist);
+        // res.send(therapist)
+    }).catch((err) => {
+        res.send("error: " + err);
+    });
+})
 module.exports = therapists;
