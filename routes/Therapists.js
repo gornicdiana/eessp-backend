@@ -93,8 +93,6 @@ therapists.get("/info", (req, res) => {
 
 therapists.put("/update", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(req.body);
-    console.log(decoded);
     const info = {
         information: req.body.infoData
     }
@@ -102,7 +100,7 @@ therapists.put("/update", (req, res) => {
         email: decoded.email
     }, info).then((therapist) => {
         console.log(therapist);
-        // res.send(therapist)
+        res.send("Profile updated!")
     }).catch((err) => {
         res.send("error: " + err);
     });
