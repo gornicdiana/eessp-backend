@@ -19,7 +19,8 @@ appointments.post("/add", (req, res) => {
         therapist: req.body.therapist,
         name: req.body.name,
         startDate: req.body.startDate,
-        endDate: req.body.endDate
+        endDate: req.body.endDate,
+        category: req.body.category
     };
 
     appointmentModel.create(appointmentData).then((appointment) => {
