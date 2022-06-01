@@ -1,0 +1,8 @@
+applications:
+  - name: diana-licenta-backend
+    host: diana-licenta-backend
+    buildpack: nodejs_buildpack
+    command: node server.js
+    memory: 512M
+    env:
+      NODE_ENV: cloud-foundry

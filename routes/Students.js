@@ -16,6 +16,7 @@ students.post("/register", (req, res) => {
         password: req.body.oRegisterData.password,
         username: req.body.oRegisterData.username
     };
+    console.log(studentData);
     studentModel.findOne({email: req.body.oRegisterData.email}).then((student) => {
         if (!student) {
             bcrypt.hash(req.body.oRegisterData.password, 10, (err, hash) => {
