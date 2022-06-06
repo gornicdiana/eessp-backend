@@ -25,6 +25,10 @@ const AppointmentSchema = new Schema({
     endDate: {
         type: Date,
         required: true
+    },
+    link: {
+        type: String,
+        required: true
     }
 });
 
