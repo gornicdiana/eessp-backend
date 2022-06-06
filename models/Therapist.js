@@ -29,6 +29,10 @@ const TherapistSchema = new Schema({
     information: {
         type: String,
         required: false
+    },
+    picture: {
+        type: String,
+        required: false
     }
 });
 

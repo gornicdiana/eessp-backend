@@ -83,7 +83,8 @@ therapists.get("/info", (req, res) => {
             phone: therapist.phone,
             firstname: therapist.firstname,
             lastname: therapist.lastname,
-            information: therapist.information
+            information: therapist.information,
+            picture: therapist.picture
         };
         res.send(data);
     }).catch((err) => {
