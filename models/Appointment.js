@@ -26,9 +26,13 @@ const AppointmentSchema = new Schema({
         type: Date,
         required: true
     },
+    response: {
+        type: Boolean,
+        required: false
+    },
     link: {
         type: String,
-        required: true
+        required: false
     }
 });
 

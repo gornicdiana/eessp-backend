@@ -12,9 +12,8 @@ appointments.post("/add", (req, res) => {
     console.log(req.body);
 
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(decoded);
+    console.log(">>>>>>>>>>>>", decoded);
 
-    const link = '';
 
     const appointmentData = {
         student: decoded.email,
@@ -22,8 +21,7 @@ appointments.post("/add", (req, res) => {
         name: req.body.name,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
-        category: req.body.category,
-        link: link
+        category: req.body.category
     };
 
     appointmentModel.create(appointmentData).then((appointment) => {
@@ -33,6 +31,22 @@ appointments.post("/add", (req, res) => {
         return res.send("error" + err);
     });
 });
+
+appointments.put("/update", (req, res) => {
+    let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    const info = {
+        response: req.body.response,
+        link: req.body.link
+    }
+    appointmentModel.updateOne({
+        email: decoded.email
+    }, info).then((appointment) => {
+        console.log(appointment);
+        res.send("Appointment updated!")
+    }).catch((err) => {
+        res.send("error: " + err);
+    });
+})
 
 appointments.get("/therapistCalendar", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);

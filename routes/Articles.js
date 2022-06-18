@@ -10,6 +10,7 @@ articles.use(cors());
 process.env.SECRET_KEY = "secret";
 articles.post("/add", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
+    console.log("**************************************************", decoded);
     const articleData = {
         email: decoded.email,
         author: "" + decoded.firstname + " " + decoded.lastname,

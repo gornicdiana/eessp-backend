@@ -50,7 +50,9 @@ therapists.post("/login", (req, res) => {
             if (bcrypt.compareSync(req.body.password, therapist.password)) {
                 const payload = {
                     _id: therapist._id,
-                    email: therapist.email
+                    email: therapist.email,
+                    firstname: therapist.firstname,
+                    lastname: therapist.lastname
                 };
                 let token = jwt.sign(payload, process.env.SECRET_KEY, {});
                 res.send(token);
