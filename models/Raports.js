@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const RaportSchema = new Schema({
+    flag: {
+        type: Boolean,
+        required: true
+    },
     doctorNumber: {
         type: String,
         required: true

@@ -70,7 +70,6 @@ doctors.post("/login", (req, res) => {
 doctors.get("/alldoctors", (req, res) => {
     doctorModel.find().then((doctor) => {
         res.send(doctor);
-        console.log(doctor);
     }).catch((err) => {
         res.send("error: " + err);
     });
@@ -78,7 +77,6 @@ doctors.get("/alldoctors", (req, res) => {
 
 doctors.get("/info", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
-    console.log(decoded);
     doctorModel.findOne({doctorNumber: decoded.doctorNumber}).then((doctor) => {
         const data = {
             email: doctor.email,

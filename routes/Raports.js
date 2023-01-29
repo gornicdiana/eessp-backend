@@ -12,6 +12,7 @@ raports.post("/add", (req, res) => {
     let decoded = jwt.verify(req.headers["authorization"], process.env.SECRET_KEY);
     console.log("**************************************************", decoded);
     const raportData = {
+        flag: true,
         doctorNumber: decoded.doctorNumber,
         cnp: req.body.cnp,
         doctorFirstname: req.body.doctorFirstname,
@@ -92,7 +93,7 @@ raports.get("/allraports", (req, res) => {
 raports.get("/raport", (req, res) => {
     let cnp = req.headers["authorization"];
     console.log(cnp);
-    raportModel.findOne({ cnp: cnp}).then((raport) => {
+    raportModel.findOne({ cnp: cnp }).then((raport) => {
         res.send(raport);
         console.log(raport);
     }).catch((err) => {
@@ -101,19 +102,14 @@ raports.get("/raport", (req, res) => {
     });
 });
 
-raports.put("/archive", (req, res) => {
-    console.log("**********", req.body);
+raports.put("/archive", async (req, res) => {
     let cnp = req.headers["authorization"];
-    console.log(cnp);
-    raportModel.updateOne({ cnp: cnp}).then((raport) => {
-        console.log(raport);
-        raport.flag = !flag;
-        res.send(raport);
-        console.log(raport);
-    }).catch((err) => {
-        console.log(err);
-        return res.send("error" + err);
-    });
+    // let archive = {
+    //     flag: true
+    // }
+    console.log("??????", cnp);
+    const raport = await raportModel.findOneAndUpdate({ cnp: cnp }, { flag: true }, {new: true})
+    return res.send(raport);
 });
 
 module.exports = raports;
